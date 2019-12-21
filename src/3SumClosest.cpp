@@ -1,81 +1,44 @@
 class Solution {
 public:
     int threeSumClosest(vector<int>& nums, int target) {
-        unsigned int N = nums.size();
-        unsigned int left;
-        unsigned int right;
-        unsigned int i_pos = 0;
-        unsigned int i_neg = 0;
-        int sum_pos = 0;
-        int sum_neg = 0;
-        int min_pos = 10000;
-        int min_neg = -10000;
-        int diff;
+        int N = nums.size();
+        int min = 999999;
+        int sum = 0;
         
-        if (N == 0)
-        {
-            return 0;
-        }
-        else if (N <= 3)
-        {
-            int sum = 0;
-            for (unsigned int i = 0; i < N; i++)
-            {
+        // Handle edge cases
+        if (N <= 3) {
+            for (int i = 0; i < N; i++) {
                 sum += nums.at(i);
             }
-            return sum;
         }
-        else
-        {
+        else {
             sort(nums.begin(), nums.end());
             
-            for (unsigned int i = 0; i < N - 2; i++)
+            for (int i = 0; i < N; i++)
             {
-                int complement = target - nums.at(i);
-                left = i + 1;
-                right = N-1;
+                int left = i + 1;
+                int right = N - 1;
                 
                 while (left < right)
                 {
-                    diff = nums.at(left) + nums.at(right) - complement;
+                    if (abs((nums.at(i) + nums.at(left) + nums.at(right)) - target) < min) {
+                        min = abs((nums.at(i) + nums.at(left) + nums.at(right)) - target);
+                        sum = nums.at(i) + nums.at(left) + nums.at(right);
+                    }
                     
-                    if (diff > 0 && diff < min_pos)
-                    {
-                        min_pos = diff;
-                        i_pos = i;
-                        sum_pos = diff + complement;
-                        right --;
+                    if ((nums.at(left) + nums.at(right)) < (target - nums.at(i))) {
+                        left += 1;
                     }
-                    else if (diff < 0 && diff > min_neg)
-                    {
-                        min_neg = diff;
-                        i_neg = i;
-                        sum_neg = diff + complement;
-                        left ++;
+                    else if ((nums.at(left) + nums.at(right)) > (target - nums.at(i))) {
+                        right -= 1;
                     }
-                    else if (diff == 0)
-                    {
-                        i_pos = i;
-                        i_neg = i;
-                        i = N;
-                        break;
-                    }
-                    else
-                    {
-                        break;
+                    else {
+                        return (nums.at(i) + nums.at(left) + nums.at(right));
                     }
                 }
             }
         }
-        if (abs(min_pos) < abs(min_neg))
-        {
-            cout << "pos : " << i_pos << "," << sum_pos << endl;
-            return sum_pos + nums.at(i_pos);
-        }
-        else
-        {
-            cout << "neg : " << i_neg << "," << sum_neg << endl;
-            return sum_neg + nums.at(i_neg);
-        }
+        
+        return sum;
     }
 };
