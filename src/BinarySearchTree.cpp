@@ -19,6 +19,9 @@ class BST {
         // Insert function
         BST *Insert(BST *, int);
 
+        // Mirror function
+        void Mirror(BST *);
+
         // In order traversal
         void InOderTraversal(BST *);
 };
@@ -45,6 +48,18 @@ BST *BST::Insert(BST *root, int value) {
     return root;
 }
 
+void BST::Mirror(BST *root) {
+    if (root == NULL) {
+        return;
+    }
+
+    Mirror(root->left);
+    Mirror(root->right);
+    BST *temp = root->left;
+    root->left = root->right;
+    root->right = temp;
+}
+
 void BST::InOderTraversal(BST *root) {
     if (root == NULL) {
         return;
@@ -68,6 +83,9 @@ int main (void) {
     b.Insert(root, 36);
     b.Insert(root, 45);
     b.Insert(root, 76);
+    b.InOderTraversal(root);
+    b.Mirror(root);
+    cout << " After traversal: " << endl;
     b.InOderTraversal(root);
 
     return 0;
